@@ -17,13 +17,15 @@ import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private val sharedPreferences: SharedPreferences
 
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var yearPicker: NumberPicker
     private lateinit var radioGroup: RadioGroup
-    private lateinit var selectYearButton: Button
+    private lateinit var confirmarButton: Button
     private lateinit var valor: EditText
     private lateinit var saldoAtual: TextView
+
+    private val PREFS_NAME = "MyPrefsFile"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +33,10 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+
         yearPicker = findViewById(R.id.yearPicker)
-        selectYearButton = findViewById(R.id.executeButton)
+        confirmarButton = findViewById(R.id.executeButton)
         radioGroup = findViewById(R.id.radioGroup)
         valor = findViewById(R.id.valor)
         saldoAtual = findViewById(R.id.viewSaldo)
@@ -40,14 +44,16 @@ class MainActivity : AppCompatActivity() {
         yearPicker.minValue = 2020
         yearPicker.maxValue = 2030
         yearPicker.setOnValueChangedListener { _, _, newVal ->
-            Toast.makeText(this, "Year $newVal", Toast.LENGTH_SHORT).show()
-            exigirSaldo(newVal)
+            //Toast.makeText(this, "Year $newVal", Toast.LENGTH_SHORT).show()
+            exibirSaldo(newVal)
         }
-        selectYearButton.setOnClickListener {
+        confirmarButton.setOnClickListener {
             if (!valor.text.isNullOrEmpty()) {
                 val floatValue = valor.text.toString().toFloatOrNull()
 
                 val ano = getYear()
+
+
                 val checkRadioButton = radioGroup.checkedRadioButtonId
                 if (floatValue != null && checkRadioButton != -1) {
                     if (checkRadioButton == R.id.receita) {
@@ -55,7 +61,9 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         removerValor(ano, floatValue)
                     }
+                    valor.text.clear()
                 }
+
                 else {
                     Toast.makeText(this, "Selecione uma operação e um valor", Toast.LENGTH_SHORT).show()
                 }
@@ -68,24 +76,39 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        exibirSaldo(getYear())
     }
     fun getYear(): Int {
-        Toast.makeText(this, "Year ${yearPicker.value}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Year ${yearPicker.value}", Toast.LENGTH_SHORT).show()
         return yearPicker.value
     }
     fun adicionarValor(ano: Int, valor: Float) {
-        val saldo = saldoAtual.text.toString().toFloatOrNull() ?: 0f
+        val saldo = sharedPreferences.getFloat(ano.toString(), 0f)
         val novoSaldo = saldo + valor
-        saldoAtual.text = novoSaldo.toString()
-
+        with(sharedPreferences.edit()) {
+            putFloat(ano.toString(), novoSaldo)
+            apply()
+        }
+        exibirSaldo(ano)
     }
     fun removerValor(ano: Int, valor: Float) {
         val saldo = saldoAtual.text.toString().toFloatOrNull() ?: 0f
+        if (saldo < valor) {
+            Toast.makeText(this, "Saldo insuficiente", Toast.LENGTH_SHORT).show()
+            return
+        }
         val novoSaldo = saldo - valor
-        saldoAtual.text = novoSaldo.toString()
+        with(sharedPreferences.edit()) {
+            putFloat(ano.toString(), novoSaldo)
+            apply()
+        }
+        exibirSaldo(ano)
     }
     fun exibirSaldo(ano: Int) {
-        Toast.makeText(this, "Saldo para o ano $ano", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Saldo para o ano $ano", Toast.LENGTH_SHORT).show()
+        val saldo = sharedPreferences.getFloat(ano.toString(), 0f)
+        saldoAtual.text = "R$ " + String.format("%.2f", saldo)
+
     }
 
 }
