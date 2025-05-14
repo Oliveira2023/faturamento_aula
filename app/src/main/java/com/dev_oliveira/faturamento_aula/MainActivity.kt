@@ -1,6 +1,7 @@
 package com.dev_oliveira.faturamento_aula
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.inputmethod.InputBinding
@@ -19,11 +20,14 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPreferences2: SharedPreferences
     private lateinit var yearPicker: NumberPicker
     private lateinit var radioGroup: RadioGroup
     private lateinit var confirmarButton: Button
     private lateinit var valor: EditText
     private lateinit var saldoAtual: TextView
+    private lateinit var btnAddTitulo: Button
+    private lateinit var nomeEmpresa: TextView
 
     private val PREFS_NAME = "MyPrefsFile"
 
@@ -40,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         radioGroup = findViewById(R.id.radioGroup)
         valor = findViewById(R.id.valor)
         saldoAtual = findViewById(R.id.viewSaldo)
+        btnAddTitulo = findViewById(R.id.btnAddTitulo)
+        nomeEmpresa = findViewById(R.id.viewNomeEmpresa)
 
         yearPicker.minValue = 2020
         yearPicker.maxValue = 2030
@@ -67,16 +73,30 @@ class MainActivity : AppCompatActivity() {
                 else {
                     Toast.makeText(this, "Selecione uma operação e um valor", Toast.LENGTH_SHORT).show()
                 }
-
-
             }
         }
+
+        btnAddTitulo.setOnClickListener {
+            val intent = Intent(this, activity_personalizar::class.java)
+            startActivity(intent)
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         exibirSaldo(getYear())
+    }
+     override fun onResume() {
+        super.onResume()
+
+        sharedPreferences2 = getSharedPreferences(SettingsManager.ARQUIVO_PREFERENCIAS, MODE_PRIVATE)
+        val nomeFantasia = sharedPreferences2.getString("nomeFantasia", "")
+        if (!nomeFantasia.isNullOrEmpty()) {
+            nomeEmpresa.text = nomeFantasia
+        }
+        //exibirSaldo(getYear())
     }
     fun getYear(): Int {
         //Toast.makeText(this, "Year ${yearPicker.value}", Toast.LENGTH_SHORT).show()
@@ -109,6 +129,10 @@ class MainActivity : AppCompatActivity() {
         val saldo = sharedPreferences.getFloat(ano.toString(), 0f)
         saldoAtual.text = "R$ " + String.format("%.2f", saldo)
 
+    }
+
+    companion object {
+        val MyPrefsFile: String? = null
     }
 
 }

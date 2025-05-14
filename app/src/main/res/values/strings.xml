@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Faturamento_aula</string>
+    <string name="nome_da_empresa">Informe o nome da empresa</string>
+    <string name="hint_nome">Digite o nome da sua empresa aqui</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="nomeEmpresa">Faturamento</string>
 </resources>

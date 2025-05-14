@@ -16,15 +16,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/texto1"
+        app:layout_constraintTop_toBottomOf="@+id/viewNomeEmpresa"
         app:layout_constraintVertical_bias="0.089999974" />
 
     <TextView
-        android:id="@+id/texto1"
+        android:id="@+id/viewNomeEmpresa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Faturamento"
+        android:text="@string/nomeEmpresa"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,6 +68,7 @@
         android:ems="10"
         android:hint="Digite o valor"
         android:inputType="number"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup"
         app:layout_constraintVertical_bias="0.06999999"
@@ -83,7 +84,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewSaldo" />
+        app:layout_constraintTop_toBottomOf="@+id/viewSaldo"
+        app:layout_constraintVertical_bias="0.323" />
 
     <TextView
         android:id="@+id/viewSaldo"
@@ -93,9 +95,21 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/valor"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintVertical_bias="0.141" />
+
+    <Button
+        android:id="@+id/btnAddTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Adicionar Título"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/executeButton"
+        app:layout_constraintVertical_bias="0.489" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,6 +22,6 @@ class SettingsManager(context: Context) {
     }
 
     companion object {
-        private const val ARQUIVO_PREFERENCIAS = "meusDados"
+        const val ARQUIVO_PREFERENCIAS = "meusDados"
     }
 }
